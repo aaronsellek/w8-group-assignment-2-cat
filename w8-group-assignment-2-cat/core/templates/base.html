@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <title>Flashcards {% block title %}Register{% endblock %}</title>
+</head>
+
+<div>
+{% if messages %}
+<ul class="messages">
+{% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+<header class="title_bar">
+        <div class="home"><h4><a href="{% url 'index' %}"><img src="https://cdn.dribbble.com/users/530738/screenshots/1910587/dribbble_iso_house.gif" width="110" height="60"></a></div></h4>
+        <h1 class="title">Flashcards</h1>
+            {% if user.is_authenticated %}
+                <div class="username"><h4><a href="{% url 'user_profile' user.username %}">{{ user.get_username }}</a> | 
+                <a href="{% url 'auth_logout' %}">Logout</a></h4></div>
+
+            {% else %}
+                <div class="login"><h4><a href="{% url 'auth_login' %}">Login</a> |
+                <a href="{% url 'registration_register' %}">Register</a></h4></div>
+            {% endif %}
+
+</header>
+            <section class="content">
+                {% block content %}{% endblock %}
+            </section>
+            {% block pagination %}
+                {% if is_paginated %}
+                <div class="pagination">
+                    <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                    </span>
+                </div>
+                {% endif %}
+            {% endblock %}
+        </section>
+    </body>
+</html>
+
+
+{% comment %} delete piplock
+leave shell
+run pipenv install
+pipenv shell {% endcomment %}
